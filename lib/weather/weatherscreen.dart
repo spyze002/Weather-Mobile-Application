@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import './forcastsection.dart';
 import './additonal_info.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +48,9 @@ class _WeatherAppState extends State<WeatherApp> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {});
+            },
             icon: const Icon(Icons.refresh),
           )
         ],
@@ -69,6 +72,7 @@ class _WeatherAppState extends State<WeatherApp> {
           final pressure = data['list'][0]['main']['pressure'];
           final humidity = data['list'][0]['main']['humidity'];
           final windSpeed = data['list'][0]['wind']['speed'];
+
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -91,7 +95,7 @@ class _WeatherAppState extends State<WeatherApp> {
                           child: Column(
                             children: [
                               Text(
-                                "$currentTemp °K",
+                                "$currentTemp K",
                                 style: const TextStyle(
                                     fontSize: 32, fontWeight: FontWeight.bold),
                               ),
@@ -150,8 +154,10 @@ class _WeatherAppState extends State<WeatherApp> {
                       scrollDirection: Axis.horizontal,
                       itemCount: 39,
                       itemBuilder: (context, index) {
+                        final time =
+                            DateTime.parse(data['list'][index + 1]['dt_txt']);
                         return ForcastSection(
-                            time: data['list'][index + 1]['dt'].toString(),
+                            time: DateFormat.j().format(time),
                             icon: data['list'][index + 1]['weather'][0]
                                             ['main'] ==
                                         "Clouds" ||
